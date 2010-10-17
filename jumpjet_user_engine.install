@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * Implement hook_install()
+ */
+
+function jumpjet_user_engine_install() {
+
+  // We want to override the role name that adminrole module creates
+  if($rid = variable_get('user_admin_role', NULL)) {
+    db_query("UPDATE {role} SET name='%s' WHERE rid=%d", 'web developer', $rid);
+    // And assign this role to uid=1 
+    db_query("INSERT INTO {users_roles} (uid, rid) VALUES (1, %d)", $rid);
+  }
+}
